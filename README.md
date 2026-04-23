@@ -44,11 +44,40 @@ This is designed for a **live 5-minute demo**:
 ```text
 .
 ├── main.py
+├── pyproject.toml
 ├── requirements.txt
 └── README.md
 ```
 
 ## How to run
+
+1. Install Poetry (once):
+
+```powershell
+pip install poetry
+```
+
+2. Install dependencies:
+
+```powershell
+poetry install
+```
+
+3. Run the demo:
+
+```powershell
+poetry run python main.py
+```
+
+Optional (script entry point):
+
+```powershell
+poetry run drift-happens
+```
+
+## Alternative: pip + requirements.txt
+
+If you prefer not to use Poetry, you can still run with `pip`:
 
 1. Create and activate a virtual environment (recommended).
 
