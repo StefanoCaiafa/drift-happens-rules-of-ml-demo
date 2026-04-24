@@ -1,14 +1,16 @@
 # Drift Happens - Rules of ML Demo
 
-Demo corta (5 min) para presentar buenas prácticas de ML en producción, basada en:
+Buenas prácticas de ML en producción, basado en:
 
 - Rules of Machine Learning (Martin Zinkevich)
 
+Este proyecto presenta un notebook reproducible con datos sintéticos de churn para ilustrar dos ideas clave: empezar con modelos simples e interpretables, y monitorear el train-serving skew cuando el modelo pasa a producción.
+
 Referencia oficial:
-[Reglas del aprendizaje automático: prácticas recomendadas para la ingeniería de AA](https://developers.google.com/machine-learning/guides/rules-of-ml?hl=es-419)
+<a href="https://developers.google.com/machine-learning/guides/rules-of-ml?hl=es-419" target="_blank" rel="noopener noreferrer">Reglas del aprendizaje automático: prácticas recomendadas para la ingeniería de AA</a>
 
 Video recomendado (Martin Zinkevich):
-[Rules of Machine Learning - charla introductoria](https://www.youtube.com/watch?v=VfcY0edoSLU)
+<a href="https://www.youtube.com/watch?v=VfcY0edoSLU" target="_blank" rel="noopener noreferrer">Rules of Machine Learning - charla introductoria</a>
 
 La demo cubre 2 bloques:
 
@@ -65,14 +67,11 @@ Los datos son sintéticos (sin CSV externo ni API):
 
 Esto hace la demo reproducible, controlada y fácil de explicar.
 
-## Guion sugerido (2 personas, 5 min)
+## Mensajes clave
 
-1. Persona A (2-2.5 min): Demo 1, Rule #4 y Rule #14.
-2. Persona B (2-2.5 min): Demo 2, Rule #37.
-3. Cierre (20-30 s):
-  - Start simple.
-  - Good offline metrics are not enough.
-  - Monitor production drift/skew.
+- Start simple.
+- Good offline metrics are not enough.
+- Monitor production drift/skew.
 
 ## Estructura del proyecto
 
