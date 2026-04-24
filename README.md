@@ -1,85 +1,176 @@
-# Drift Happens - Rules of ML Demo
+# Drift Happens – Rules of ML Demo
 
-Buenas prácticas de ML en producción, basado en:
+Este proyecto demuestra buenas prácticas de Machine Learning en producción, basado en el paper:
 
-- Rules of Machine Learning (Martin Zinkevich)
+**Rules of Machine Learning – Martin Zinkevich (Google)**
 
-Este proyecto presenta un notebook reproducible con datos sintéticos de churn para ilustrar dos ideas clave: empezar con modelos simples e interpretables, y monitorear el train-serving skew cuando el modelo pasa a producción.
+El objetivo es mostrar, de forma simple y reproducible, algunos de los problemas más comunes en sistemas reales de ML, especialmente la diferencia entre resultados offline y comportamiento en producción.
 
-Referencia oficial:
-<a href="https://developers.google.com/machine-learning/guides/rules-of-ml?hl=es-419" target="_blank" rel="noopener noreferrer">Reglas del aprendizaje automático: prácticas recomendadas para la ingeniería de AA</a>
+🔗 Referencia oficial:  
+https://developers.google.com/machine-learning/guides/rules-of-ml?hl=es-419  
 
-Video recomendado (Martin Zinkevich):
-<a href="https://www.youtube.com/watch?v=VfcY0edoSLU" target="_blank" rel="noopener noreferrer">Rules of Machine Learning - charla introductoria</a>
+🎥 Video recomendado:  
+https://www.youtube.com/watch?v=VfcY0edoSLU  
 
-La demo cubre 2 bloques:
+---
 
-1. Rule #4 + Rule #14:
-   - Keep the first model simple.
-   - Start with an interpretable model.
-2. Rule #37:
-   - Medir train-serving skew.
+## Objetivo de la demo
+
+Esta demo utiliza un problema sintético de churn para ilustrar dos ideas centrales del paper:
+
+1. **Empezar con modelos simples e interpretables**
+2. **Un modelo que funciona bien offline puede degradarse en producción**
+
+Se busca mostrar que el verdadero desafío en ML no es solo entrenar modelos, sino construir sistemas robustos que funcionen correctamente en el tiempo.
+
+---
 
 ## Qué muestra el notebook
 
-Notebook: `drift_happens_demo.ipynb`
+📓 Notebook: `drift_happens_demo.ipynb`
 
-- Demo 1 (offline): compara Regresión Logística vs Random Forest para mostrar que un baseline simple e interpretable puede ser suficiente.
-- Demo 2 (serving): aplica drift sintético y evidencia caída de accuracy + alerta de skew por cambio de distribución de features.
+El notebook está dividido en dos demos principales:
 
-Mensaje principal: en ML de producción, no alcanza con un buen resultado offline; hay que monitorear datos y comportamiento del sistema.
+---
 
-## Setup (Poetry)
+### Demo 1 – Empezar simple (Rule #4 + Rule #14)
 
-1. Instalar Poetry (una sola vez):
+Se comparan dos modelos:
 
-```powershell
-pip install poetry
-```
+- Logistic Regression (baseline simple e interpretable)
+- Random Forest (modelo más flexible)
 
-2. Instalar dependencias:
+**Resultado observado:**
 
-```powershell
-poetry install
-```
+- Ambos modelos tienen performance muy similar  
+- El modelo simple incluso puede rendir igual o mejor  
 
-3. Abrir y ejecutar el notebook:
+ Esto refuerza que:
 
-- Archivo: `drift_happens_demo.ipynb`
-- Ejecutar celdas en orden, de arriba hacia abajo.
+> No es necesario empezar con modelos complejos para obtener buenos resultados.
 
-Opcional, para abrir Jupyter con el entorno de Poetry:
+Además, los modelos simples son más fáciles de:
 
-```powershell
-poetry run jupyter notebook
-```
+- entender  
+- debuggear  
+- mantener  
+- explicar en producción  
+
+---
+
+### Demo 2 – Offline vs Producción (Rule #37)
+
+Se evalúa el mismo modelo en dos escenarios:
+
+- Datos de validación (offline)  
+- Datos simulando producción con drift  
+
+Para simular producción se introduce:
+
+- cambio en distribución de features  
+- escalamiento inconsistente (train-serving skew)  
+- ruido gaussiano  
+- leve cambio en etiquetas  
+
+**Resultado observado:**
+
+- Alta accuracy offline (~0.98)  
+- Caída significativa en serving (~0.89)  
+
+ Esto demuestra que:
+
+> Buenas métricas offline no garantizan buen rendimiento en producción.
+
+Además, se incluye una función para detectar skew comparando medias de features, generando alertas cuando hay cambios importantes.
+
+---
+
+## Conceptos clave que ilustra la demo
+
+- **Baseline primero**: un modelo simple es un excelente punto de partida  
+- **Interpretabilidad**: facilita debugging y mantenimiento  
+- **Train-serving skew**: diferencias entre entrenamiento y producción  
+- **Data drift**: cambios en los datos con el tiempo  
+- **Monitoreo**: esencial para sistemas en producción  
+
+---
 
 ## Datos de la demo
 
-Los datos son sintéticos (sin CSV externo ni API):
+Los datos son completamente sintéticos (no se usan archivos externos):
 
-- `sklearn.datasets.make_classification` genera el dataset base de churn.
-- Luego se simula serving drift con:
-   - corrimiento de media en features,
-   - cambio de escala,
-   - ruido gaussiano,
-   - leve perturbación de etiquetas.
+- Se generan con `sklearn.datasets.make_classification`  
+- Representan un problema típico de churn  
+- Permiten controlar el comportamiento del sistema  
 
-Esto hace la demo reproducible, controlada y fácil de explicar.
+El drift en producción se simula modificando:
 
-## Mensajes clave
+- medias de ciertas features  
+- escalas  
+- ruido  
+- distribución de etiquetas  
 
-- Start simple.
-- Good offline metrics are not enough.
-- Monitor production drift/skew.
+Esto hace que la demo sea:
+
+- reproducible  
+- simple de entender  
+- representativa de problemas reales  
+
+---
+
+## Setup (Poetry)
+
+### 1. Instalar Poetry (una sola vez)
+
+```bash
+pip install poetry
+```
+
+### 2. Instalar dependencias
+
+```bash
+poetry install
+```
+
+### 3. Ejecutar el notebook
+
+Abrir el archivo:
+
+`drift_happens_demo.ipynb`
+
+Ejecutar las celdas en orden (de arriba hacia abajo).
+
+Opcional, para abrir Jupyter con el entorno de Poetry:
+
+```bash
+poetry run jupyter notebook
+```
+
+---
 
 ## Estructura del proyecto
 
 ```text
 .
 ├── drift_happens_demo.ipynb
+├── pyproject.toml
 ├── poetry.lock
 ├── poetry.toml
-├── pyproject.toml
 └── README.md
 ```
+
+---
+
+## Conclusión
+
+Esta demo refleja una de las ideas más importantes del paper:
+
+> El problema real del Machine Learning no es el modelo, sino el sistema.
+
+Un modelo puede funcionar perfectamente en pruebas, pero si los datos cambian o el pipeline no está bien diseñado, el rendimiento en producción se degrada.
+
+Por eso, en ML en producción es clave:
+
+- construir pipelines confiables
+- monitorear constantemente
+- iterar sobre datos y features
