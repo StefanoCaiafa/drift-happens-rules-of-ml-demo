@@ -1,11 +1,33 @@
 # Drift Happens - Rules of ML Demo
 
-Demo corta y reproducible para mostrar 2 ideas:
+Demo corta (5 min) para presentar buenas prácticas de ML en producción, basada en:
 
-1. Un modelo simple puede rendir parecido a uno mas complejo.
-2. El drift de datos puede degradar performance en produccion.
+- Rules of Machine Learning (Martin Zinkevich)
 
-## Setup (unico flujo con Poetry)
+Referencia oficial:
+[Reglas del aprendizaje automático: prácticas recomendadas para la ingeniería de AA](https://developers.google.com/machine-learning/guides/rules-of-ml?hl=es-419)
+
+Video recomendado (Martin Zinkevich):
+[Rules of Machine Learning - charla introductoria](https://www.youtube.com/watch?v=VfcY0edoSLU)
+
+La demo cubre 2 bloques:
+
+1. Rule #4 + Rule #14:
+   - Keep the first model simple.
+   - Start with an interpretable model.
+2. Rule #37:
+   - Medir train-serving skew.
+
+## Qué muestra el notebook
+
+Notebook: `drift_happens_demo.ipynb`
+
+- Demo 1 (offline): compara Regresión Logística vs Random Forest para mostrar que un baseline simple e interpretable puede ser suficiente.
+- Demo 2 (serving): aplica drift sintético y evidencia caída de accuracy + alerta de skew por cambio de distribución de features.
+
+Mensaje principal: en ML de producción, no alcanza con un buen resultado offline; hay que monitorear datos y comportamiento del sistema.
+
+## Setup (Poetry)
 
 1. Instalar Poetry (una sola vez):
 
@@ -13,45 +35,50 @@ Demo corta y reproducible para mostrar 2 ideas:
 pip install poetry
 ```
 
-2. Instalar dependencias del proyecto:
+2. Instalar dependencias:
 
 ```powershell
 poetry install
 ```
-
-Con esta configuracion, Poetry crea el entorno virtual local en `.venv/`.
 
 3. Abrir y ejecutar el notebook:
 
 - Archivo: `drift_happens_demo.ipynb`
 - Ejecutar celdas en orden, de arriba hacia abajo.
 
-Si quieres correr el script por terminal:
+Opcional, para abrir Jupyter con el entorno de Poetry:
 
 ```powershell
-poetry run python main.py
+poetry run jupyter notebook
 ```
 
-## De donde salen los datos
+## Datos de la demo
 
-Los datos **no** vienen de un CSV externo ni API.
+Los datos son sintéticos (sin CSV externo ni API):
 
-Se generan de forma sintetica con:
+- `sklearn.datasets.make_classification` genera el dataset base de churn.
+- Luego se simula serving drift con:
+   - corrimiento de media en features,
+   - cambio de escala,
+   - ruido gaussiano,
+   - leve perturbación de etiquetas.
 
-- `sklearn.datasets.make_classification` para crear un dataset binario base.
-- Una transformacion sobre ese dataset para simular drift:
-  - corrimiento de media en algunas features,
-  - cambio de escala en otra feature,
-  - ruido gaussiano controlado.
+Esto hace la demo reproducible, controlada y fácil de explicar.
 
-Esto permite una demo deterministica y facil de explicar.
+## Guion sugerido (2 personas, 5 min)
 
-## Estructura
+1. Persona A (2-2.5 min): Demo 1, Rule #4 y Rule #14.
+2. Persona B (2-2.5 min): Demo 2, Rule #37.
+3. Cierre (20-30 s):
+  - Start simple.
+  - Good offline metrics are not enough.
+  - Monitor production drift/skew.
+
+## Estructura del proyecto
 
 ```text
 .
 ├── drift_happens_demo.ipynb
-├── main.py
 ├── poetry.lock
 ├── poetry.toml
 ├── pyproject.toml
